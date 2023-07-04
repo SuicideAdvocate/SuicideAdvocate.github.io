@@ -1,171 +1,17 @@
 <html>
-
 <head>
     <title>Wheel of misfortune</title>
     <meta charset="UTF-8" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            height: 100vh;
-            display: grid;
-            place-items: center;
-        }
-
-        #wheelOfFortune {
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #wheel {
-            display: block;
-        }
-
-        #winner {
-            margin-top: 0px;
-        }
-
-        #spin {
-            font: 1em/0 sans-serif;
-            user-select: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 30%;
-            height: 30%;
-            margin: -15%;
-            background: #fff;
-            color: #fff;
-            box-shadow: 0 0 0 8px currentColor, 0 0px 15px 5px rgba(0, 0, 0, 0.6);
-            border-radius: 50%;
-            transition: 0.8s;
-        }
-
-        #spin::after {
-            content: '';
-            position: absolute;
-            top: -17px;
-            border: 10px solid transparent;
-            border-bottom-color: currentColor;
-            border-top: none;
-        }
-    </style>
+    <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
+    <div id="participantsSelector">
+    </div>
     <div id="wheelOfFortune">
         <canvas id="wheel" width="300" height="300"></canvas>
         <div id="spin">SPIN</div>
     </div>
 </body>
-<script>
-    const sectors = [{
-        color: '#f82',
-        label: 'Viktor'
-    },
-    {
-        color: '#0bf',
-        label: 'Tomas B'
-    },
-    {
-        color: '#fb0',
-        label: 'Tomas F'
-    },
-    {
-        color: '#0fb',
-        label: 'Peter'
-    },
-    {
-        color: '#b0f',
-        label: 'Jozef'
-    },
-    {
-        color: '#f0b',
-        label: 'Tibor'
-    },
-    {
-        color: '#bf0',
-        label: 'Boris'
-    }
-    ]
-
-    const rand = (m, M) => Math.random() * (M - m) + m
-    const tot = sectors.length
-    const spinEl = document.querySelector('#spin')
-    const ctx = document.querySelector('#wheel').getContext('2d')
-    const dia = ctx.canvas.width
-    const rad = dia / 2
-    const PI = Math.PI
-    const TAU = 2 * PI
-    const arc = TAU / sectors.length
-
-    const friction = 0.984 // 0.995=soft, 0.99=mid, 0.98=hard
-    let angVel = 0 // Angular velocity
-    let ang = 0 // Angle in radians
-
-    const getIndex = () => Math.floor(tot - (ang / TAU) * tot) % tot
-
-    function drawSector(sector, i) {
-        const ang = arc * i
-        ctx.save()
-        // COLOR
-        ctx.beginPath()
-        ctx.fillStyle = sector.color
-        ctx.moveTo(rad, rad)
-        ctx.arc(rad, rad, rad, ang, ang + arc)
-        ctx.lineTo(rad, rad)
-        ctx.fill()
-        // TEXT
-        ctx.translate(rad, rad)
-        ctx.rotate(ang + arc / 2)
-        ctx.textAlign = 'right'
-        ctx.fillStyle = '#fff'
-        ctx.font = 'bold 20px sans-serif'
-        ctx.fillText(sector.label, rad - 10, 10)
-        //
-        ctx.restore()
-    }
-
-    function rotate() {
-        const sector = sectors[getIndex()]
-        ctx.canvas.style.transform = `rotate(${ang - PI / 2}rad)`
-        spinEl.textContent = sector.label
-        spinEl.style.background = sector.color
-    }
-
-    function frame() {
-        if (!angVel) return
-        angVel *= friction // Decrement velocity by friction
-        if (angVel < 0.002) angVel = 0 // Bring to stop
-        ang += angVel // Update angle
-        ang %= TAU // Normalize angle
-        rotate()
-    }
-
-    function engine() {
-        frame()
-        requestAnimationFrame(engine)
-    }
-
-    function init() {
-        sectors.forEach(drawSector)
-        rotate() // Initial rotation
-        engine() // Start engine
-        spinEl.addEventListener('click', () => {
-            if (!angVel) angVel = rand(0.25, 0.45)
-        })
-    }
-
-    init()
-</script>
-
+<script src="./index.js"></script>
 </html>
