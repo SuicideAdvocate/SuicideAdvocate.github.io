@@ -10,10 +10,10 @@ const sectors = [
   { enabled: true, color: "#f82", label: "Viktor" },
   { enabled: true, color: "#0bf", label: "Tomas B" },
   { enabled: true, color: "#fb0", label: "Tomas F" },
-  { enabled: true, color: "#0fb", label: "Peter" },
   { enabled: true, color: "#b0f", label: "Jozef" },
   { enabled: true, color: "#f0b", label: "Tibor" },
   { enabled: true, color: "#bf0", label: "Boris" },
+  { enabled: true, color: "#1c7", label: "Daniel" },
 ];
 
 const getEnabledSectors = () => sectors.filter((sector) => sector.enabled);
